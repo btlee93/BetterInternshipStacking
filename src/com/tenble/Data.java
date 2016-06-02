@@ -1,7 +1,15 @@
 package com.tenble;
 
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by Ben on 31/05/2016.
@@ -11,6 +19,7 @@ public class Data {
     private static int MAX_NUM_CHOICES = 17;
     private static int NUM_PREFERENCES_ON_SHEET = 15;
     private static int[] SET_ORDERING = new int[] { 1, 5, 10, 9, 3, 8, 6, 13, 12, 4, 7, 11, 2, 14, 15 };
+    private static Optional<int[]> PRESET_SHEET = Optional.of(new int[] { 5,1,10,9,3,8,13,6,12,4,2,15,7,14,11 });
     private static HashMap<Integer, Integer> choiceToOrder;
 
     int orderedChoices[]; // ordered choices by popularity, eg [0] = 3 means 3rd choice out of all choices is most popular
@@ -82,7 +91,7 @@ public class Data {
                 }
                 choiceToPeople.get(allPrefs[j]).add(i);
             }
-            PreferenceSheet sheet = new PreferenceSheet(allPrefs);
+            PreferenceSheet sheet = new PreferenceSheet(i, allPrefs);
             allPeoplePreferences.add(sheet);
         }
 
@@ -149,7 +158,11 @@ public class Data {
         }
     }
 
-    public PreferenceSheet buildRandomPreferenceSheet(int... mustHaveChoices) {
+    public PreferenceSheet buildRandomPreferenceSheet(int idx, int... mustHaveChoices) {
+        if (PRESET_SHEET.isPresent()) {
+            return new PreferenceSheet(idx, Arrays.copyOf(PRESET_SHEET.get(), PRESET_SHEET.get().length));
+        }
+
         HashSet<Integer> choices = new HashSet<Integer>();
         for (int i = 0; i < orderedChoices.length; i++) {
             choices.add(orderedChoices[i]);
@@ -177,7 +190,7 @@ public class Data {
         for (int i = 0; i < mustHaveChoices.length; i++) {
             copy[indexArr[i]] = mustHaveChoices[i];
         }
-        return new PreferenceSheet(copy);
+        return new PreferenceSheet(idx, copy);
     }
 
 

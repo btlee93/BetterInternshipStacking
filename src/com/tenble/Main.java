@@ -5,17 +5,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Random;
-import java.util.concurrent.*;
-import java.util.stream.Stream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
     private static int MAX_THREADS = 8;
-    private static int NUM_SIMULATIONS = 1000000;
-    private static int NUM_TRIALS_PER_SIMULATION = 10000;
-    private static int MIN_SPOTS_PER_CHOICE = 10;
-    private static int MAX_SPOTS_PER_CHOICE = 20;
+    private static int NUM_SIMULATIONS = 235;
+    private static int NUM_TRIALS_PER_SIMULATION = 5000000;
+    private static int MIN_SPOTS_PER_CHOICE = 5;
+    private static int MAX_SPOTS_PER_CHOICE = 12;
     private static int CSV_INDEX_OF_PREF = 3;
     private static int SLEEP_TIME = 5000;
     private static int[] MY_CHOICES = new int[] { 1, 3 };
@@ -61,7 +63,10 @@ public class Main {
         if (cols.length > CSV_INDEX_OF_PREF) {
             // so hacky
             try {
-                intt = Optional.of(Integer.parseInt(cols[CSV_INDEX_OF_PREF].substring(0, 2)));
+                int pref = Integer.parseInt(cols[CSV_INDEX_OF_PREF + 1]);
+                if (pref == 1) {
+                    intt = Optional.of(Integer.parseInt(cols[CSV_INDEX_OF_PREF].substring(0, 2)));
+                }
             } catch (Exception e) {}
         }
 

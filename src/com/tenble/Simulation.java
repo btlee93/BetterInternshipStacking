@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Ben on 31/05/2016.
@@ -23,11 +22,10 @@ public class Simulation implements Runnable {
         this.data = new Data(data);
         this.numTrials = numTrials;
         this.spotsPerHospital = spotsPerHospital;
-        myPrefSheet = data.buildRandomPreferenceSheet(mustHaveChoices);
 
-        // data.orderedChoices; ceebs modify this
+        myIndex = this.data.allPeoplePreferences.size();
+        myPrefSheet = data.buildRandomPreferenceSheet(myIndex, mustHaveChoices);
         this.data.allPeoplePreferences.add(myPrefSheet);
-        myIndex = this.data.allPeoplePreferences.size()-1;
         for (int pref : myPrefSheet.preferences) {
             if (!this.data.choiceToPeople.containsKey(pref)) {
                 this.data.choiceToPeople.put(pref, new HashSet<Integer>());
@@ -46,38 +44,39 @@ public class Simulation implements Runnable {
             boolean failedSimulation = false;
             Integer choiceIGot = null;
 
-            // TODO randomize this
+            int[] randomArr = new int[data.allPeoplePreferences.size()];
+            for (int j = 0; j < randomArr.length; j++) {
+                randomArr[j] = j;
+            }
+            Data.shuffleArray(randomArr);
 
             for (int j = 0; j < data.allPeoplePreferences.size(); j++) {
-                PreferenceSheet ithSheet = data.allPeoplePreferences.get(j);
+                PreferenceSheet ithSheet = data.allPeoplePreferences.get(randomArr[j]);
 
+                // try to give first preference
                 failedSimulation = true;
-                for (int choice : ithSheet.preferences) {
+                for (int k = 0; k < ithSheet.preferences.length; k++) {
+                    int choice = ithSheet.preferences[k];
+
                     if (!choiceToPeople.containsKey(choice)) {
                         choiceToPeople.put(choice, new HashSet<Integer>());
                     }
-                    if (choiceToPeople.get(choice).size() < spotsPerHospital) {
-                        failedSimulation = false;
-                    }
-                }
-                if (failedSimulation) {
-                    break;
-                }
 
-                while (true) {
-                    int randInd = random.nextInt(ithSheet.preferences.length);
-                    int points = randInd+1;
-                    int choice = ithSheet.preferences[randInd];
                     if (choiceToPeople.get(choice).size() < spotsPerHospital) {
-                        choiceToPeople.get(choice).add(j);
-                        error += points;
+                        choiceToPeople.get(choice).add(ithSheet.idx);
+                        error += k+1;
 
-                        if (j == myIndex) {
+                        if (ithSheet.idx == myIndex) {
                             choiceIGot = choice;
                         }
 
+                        failedSimulation = false;
                         break;
                     }
+                }
+
+                if (failedSimulation) {
+                    break;
                 }
             }
 

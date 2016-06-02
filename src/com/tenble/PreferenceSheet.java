@@ -5,13 +5,15 @@ package com.tenble;
  */
 public class PreferenceSheet {
 
+    int idx;
     int preferences[]; // array of just preferences, eg [3, 5, 6, 7]
 
     /**
      *
      * @param preferences
      */
-    public PreferenceSheet(int... preferences) {
+    public PreferenceSheet(int idx, int... preferences) {
+        this.idx = idx;
         this.preferences = new int[preferences.length];
         for (int i = 0; i < preferences.length; i++) {
             this.preferences[i] = preferences[i];
@@ -19,7 +21,7 @@ public class PreferenceSheet {
     }
 
     public PreferenceSheet(PreferenceSheet rhs) {
-        this(rhs.preferences);
+        this(rhs.idx, rhs.preferences);
     }
 
     @Override
