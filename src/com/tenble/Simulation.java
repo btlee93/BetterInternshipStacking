@@ -62,7 +62,11 @@ public class Simulation implements Runnable {
                         choiceToPeople.put(choice, new HashSet<Integer>());
                     }
 
-                    if (choiceToPeople.get(choice).size() < spotsPerHospital) {
+                    int sphrel = spotsPerHospital;
+                    if (choice == 12 || choice == 13) {
+                        sphrel *= 2;
+                    }
+                    if (choiceToPeople.get(choice).size() < sphrel) {
                         choiceToPeople.get(choice).add(ithSheet.idx);
                         error += k+1;
 

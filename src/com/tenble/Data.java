@@ -19,7 +19,8 @@ public class Data {
     private static int MAX_NUM_CHOICES = 17;
     private static int NUM_PREFERENCES_ON_SHEET = 15;
     private static int[] SET_ORDERING = new int[] { 1, 5, 10, 9, 3, 8, 6, 13, 12, 4, 7, 11, 2, 14, 15 };
-    private static Optional<int[]> PRESET_SHEET = Optional.of(new int[] { 5,1,10,9,3,8,13,6,12,4,2,15,7,14,11 });
+    //private static Optional<int[]> PRESET_SHEET = Optional.of(new int[] { 5,1,10,9,3,8,13,6,4,2,12,15,7,14,11 });
+    private static Optional<int[]> PRESET_SHEET = Optional.of(new int[] { 5, 1, 10, 9, 3, 8, 6, 13, 12, 4, 7, 11, 2, 14, 15 });
     private static HashMap<Integer, Integer> choiceToOrder;
 
     int orderedChoices[]; // ordered choices by popularity, eg [0] = 3 means 3rd choice out of all choices is most popular

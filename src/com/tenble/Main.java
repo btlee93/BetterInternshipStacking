@@ -14,10 +14,10 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     private static int MAX_THREADS = 8;
-    private static int NUM_SIMULATIONS = 235;
-    private static int NUM_TRIALS_PER_SIMULATION = 5000000;
-    private static int MIN_SPOTS_PER_CHOICE = 5;
-    private static int MAX_SPOTS_PER_CHOICE = 12;
+    private static int NUM_SIMULATIONS = 300;
+    private static int NUM_TRIALS_PER_SIMULATION = 10000000;
+    private static int MIN_SPOTS_PER_CHOICE = 6;
+    private static int MAX_SPOTS_PER_CHOICE = 7;
     private static int CSV_INDEX_OF_PREF = 3;
     private static int SLEEP_TIME = 5000;
     private static int[] MY_CHOICES = new int[] { 1, 3 };
